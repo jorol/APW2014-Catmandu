@@ -462,20 +462,19 @@ class: middle
 ## CLI - import()
 ```
 $ catmandu import MAB2 --fix mab2.fix
-    to MongoDB --database_name mab2 --bag mab2 
+    to MongoDB --database_name mab --bag mab 
     < journals.dat
 
 $ catmandu import MAB2 --fix mab2.fix
-     to ElasticSearch --index_name mab2 --bag mab2
-     < journals.dat
+     to ElasticSearch --index_name mab < journals.dat
 ```
 ---
 class: middle
 ## CLI - export()
 ```
-$ catmandu export MongoDB --database_name mab2 --bag mab2 to JSON
+$ catmandu export MongoDB --database_name mab --bag mab to JSON
 
-$ catmandu export ElasticSearch --index_name mab2 --bag mab2 to JSON
+$ catmandu export ElasticSearch --index_name mab to JSON
 ```
 ---
 class: middle
@@ -484,7 +483,7 @@ class: middle
 $ catmandu count MongoDB --database_name mab --bag mab 
     --query "{\"dc.publisher\": \"Heise\"}"
 
-$ catmandu count ElasticSearch --index_name mab --bag mab 
+$ catmandu count ElasticSearch --index_name mab  
     --query 'dc.publisher:"Heise"'
 ```
 ---
@@ -493,12 +492,12 @@ class: middle
 ```
 $ catmandu delete MongoDB --database_name mab --bag mab
 
-$ catmandu delete ElasticSearch --index_name mab --bag mab
+$ catmandu delete ElasticSearch --index_name mab
 
 $ catmandu delete MongoDB --database_name mab --bag mab 
     --q '{"_id":"1262750"}'
 
-$ catmandu delete ElasticSearch --index_name mab --bag mab 
+$ catmandu delete ElasticSearch --index_name mab 
     --q '_id:"1262750"'
 ```
 ---
@@ -506,15 +505,15 @@ class: middle
 ## CLI - move()
 ```
 $ catmandu move MongoDB --database_name mab --bag mab 
-    to ElasticSearch --index_name mab --bag mab
+    to ElasticSearch --index_name mab
 
 $ catmandu move MongoDB --database_name mab --bag mab 
     --query "{\"dcterms.spatial\": \"XA-DE\"}" 
-    to ElasticSearch --index_name moved --bag moved
+    to ElasticSearch --index_name spatial
 
-$ catmandu move ElasticSearch --index_name moved --bag moved 
+$ catmandu move ElasticSearch --index_name spatial
     --query "dc.identifier:\"47918-4\"" 
-    to ElasticSearch --index_name selected --bag selected
+    to ElasticSearch --index_name selected
 ```
 ---
 class: middle
@@ -524,16 +523,16 @@ $ catmandu data --from-store MongoDB --from-database_name mab
     --from-bag mab --query "{\"dc.identifier\": \"47918-4\"}"
 
 $ catmandu data --from-store ElasticSearch --from-index_name mab
-    --from-bag mab --query "dc.identifier:\"47918-4\""
+    --query "dc.identifier:\"47918-4\""
 
 $ catmandu data --from-store ElasticSearch --from-index_name mab
-    --from-bag mab --cql-query "publisher exact Heise"
+    --cql-query "publisher exact Heise"
 
 $ catmandu data --from-store ElasticSearch --from-index_name mab
-    --from-bag mab --cql-query "issued > 2009" --into-exporter YAML
+    --cql-query "issued > 2009" --into-exporter YAML
 
 $ catmandu data --from-store ElasticSearch --from-index_name mab
-    --from-bag mab --cql-query "issued > 2009" 
+    --cql-query "issued > 2009" 
     --into-exporter CSV --fix 'retain_field("_id")'
 ```
 ---
@@ -556,25 +555,25 @@ class: middle
 $ cat catmandu.yml
 ---
 store:
-  test1:
+  mdb:
    package: MongoDB
    options:
     database_name: mydb
-  test2:
+  els:
    package: ElasticSearch
    options:
     index_name: mydb
-  test3:
+  sol:
    package: Solr
    options:
     url: http://localhost:8983/solr
 
-$ catmandu import JSON to test1 < records.json
-$ catmandu import MARC to test2 < records.mrc
-$ catmandu import YAML to test3 < records.yaml
-$ catmandu export test1 to JSON
-$ catmandu export test2 to JSON
-$ catmandy export test3
+$ catmandu import JSON to mdb < records.json
+$ catmandu import MARC to els < records.mrc
+$ catmandu import YAML to sol < records.yaml
+$ catmandu export mdb to JSON
+$ catmandu export els to JSON
+$ catmandu export sol
 ```
 ---
 class: middle
