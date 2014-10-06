@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="Perl, Catmandu, ETL, data, toolkit" />
+    <meta name="description" content="Catmandu - a data toolkit" />
+    <title>Catmandu - the data toolkit</title>
+    <script src="http://gnab.github.io/remark/downloads/remark-0.6.0.min.js" type="text/javascript">
+        {
+            "highlightStyle": "solarized_light",
+            "highlightLanguage": "no-highlight"
+        }
+    </script>
+    <style type="text/css">
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+
+      body {
+        font-family: 'Droid Serif';
+        font-size: 20px;
+      }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: 400;
+        margin-bottom: 0;
+      }
+      h1 { font-size: 4em; }
+      h2 { font-size: 3em; }
+      h3 { font-size: 2em; }
+      small { font-size: 0.5em; }
+      .footnote {
+        position: absolute;
+        bottom: 3em;
+      }
+      li p { line-height: 1.25em; }
+      .red { color: #fa0000; }
+      .large { font-size: 2em; }
+      a, a > code {
+        color: rgb(249, 38, 114);
+        text-decoration: none;
+      }
+      img {
+      max-width: 800px;    
+      max-height: 600px;    
+      }
+      code {
+        -moz-border-radius: 5px;
+        -web-border-radius: 5px;
+        background: #e7e8e2;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+      .pull-left {
+        float: left;
+        width: 47%;
+      }
+      .pull-right {
+        float: right;
+        width: 47%;
+      }
+      .pull-right ~ p {
+        clear: both;
+      }
+      #slideshow .slide .content code {
+        font-size: 0.8em;
+      }
+      #slideshow .slide .content pre code {
+        font-size: 0.9em;
+        padding: 15px;
+      }
+      .inverse {
+        background: #272822;
+        color: #777872;
+        text-shadow: 0 0 20px #333;
+      }
+      .inverse h1, .inverse h2 {
+        color: #f3f3f3;
+        line-height: 0.8em;
+      }
+
+      /* Slide-specific styling */
+      #slide-inverse .footnote {
+        bottom: 12px;
+        left: 20px;
+      }
+      #slide-how .slides {
+        font-size: 0.9em;
+        position: absolute;
+        top:  151px;
+        right: 140px;
+      }
+      #slide-how .slides h3 {
+        margin-top: 0.2em;
+      }
+      #slide-how .slides .first, #slide-how .slides .second {
+        padding: 1px 20px;
+        height: 90px;
+        width: 120px;
+        -moz-box-shadow: 0 0 10px #777;
+        -webkit-box-shadow: 0 0 10px #777;
+        box-shadow: 0 0 10px #777;
+      }
+      #slide-how .slides .first {
+        background: #fff;
+        position: absolute;
+        top: 20%;
+        left: 20%;
+        z-index: 1;
+      }
+      #slide-how .slides .second {
+        position: relative;
+        background: #fff;
+        z-index: 0;
+      }
+
+      /* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+        .left-column h2:last-of-type, .left-column h3:last-child {
+          color: #000;
+        }
+      .right-column {
+        width: 75%;
+        float: right;
+        padding-top: 2em;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+class: center middle
+![LibreCat](./img/librecat.png "Logo LibreCat")
+# Catmandu - a data toolkit
+### Österreichischer Perl Workshop 2014
+##### Johann Rolschewski
+---
+class: middle
+## Libraries collect data ...
+
+  * books
+  * journals
+  * articles
+  * maps
+  * manuscripts
+  * sheets of music
+  * ...
+---
+class: middle
+## Libraries create metadata ... 
+  * bibliographic descriptions
+  * holding informations
+  * references
+  * patron data
+  * ...
+---
+class: middle center
+## Metadata
+![Katalog](./img/code4lib.png "Katalog")
+---
+class: middle
+## Metadata
+... catalogued in library specific formats (MARC21, MAB2, PICA+, ...) 
+
+... provided via library specific APIs (OAI, SRU, Z39.50, ...)
+
+... used in diverse systems (OPAC, discovery system, institutional repositories, link resolvers, ...)
+---
+class: center middle
+## Demand
+... for a library specific (meta)data toolkit
+---
+class: center middle
+## LibreCat
+... is an open collaboration of the three university libraries of **Bielefeld**, **Gent** and **Lund**
+---
+class: center middle
+## Catmandu
+... is an open source set of programming components to build up digital libraries and research services
+
+*"Importing, transforming, storing and indexing data should be easy."*
+---
+class: center middle
+## Catmandu
+... import data from various sources
+
+... map data to a common data model
+
+... store/index data in database or search engine
+
+... export data in various formats
+---
+class: center middle
+## API
+getJSON
+
+OAI
+
+SRU
+
+Z39.50
+---
+class: center middle
+## Stores
+
+CHI
+
+DBI
+
+Elasticsearch
+
+MongoDB
+
+Solr
+---
+class: center middle
+## Import/Export
+AlephX BibTeX MAB2 MARC PICA
+
+Atom CSV JSON RDF XLS YAML
+---
+class: center middle
+## Catmandu::Fix
+... easy data manipulation by non programmers
+
+... small Perl DSL
+---
+class: middle
+## Catmandu::Fix - field
+
+```perl
+add_field('name','Smith');
+# { name => 'Smith' }
+set_field('name','Doe');
+# { name => 'Doe'}
+copy_field('name','title');
+# { name => 'Doe, John', title => 'Dr.' }
+remove_field('title');
+# { name => 'Doe, John' }
+move_field('name','dc.creator');
+# { 'dc.creator' => 'Doe, John' }
+```
+---
+class: middle
+## Catmandu::Fix - field
+```perl
+# { subjects => 'Perl,R,JavaScript' }
+split_field('subjects',',');
+sort_field('subjects');
+# { subjects => ['JavaScript', 'Perl', 'R'] }
+join_field('subjects','; ');
+# { subjects => 'JavasSript; Perl; R' }
+```
+---
+class: middle
+## Catmandu::Fix - string
+```perl
+# { name => 'Doe'}
+upcase('name');
+# { name => 'DOE' }
+downcase('name');
+# { name => 'doe' }
+capitalize('name');
+# { name => 'Doe' }
+append('name',', John');
+# { name => 'Doe, John' }
+prepend('name',', Dr. ');
+# { name => 'Dr. Doe, John' }
+```
+---
+class: middle
+## Catmandu::Fix - string
+```perl
+# { name => ' Doe,  '}
+trim('name');
+# { name => 'Doe,' }
+trim('name','nonword');
+# { name => 'Doe' }
+substring('name', 0, 1);
+# { name => 'D' }
+```
+---
+class: middle
+## Catmandu::Fix - string
+```perl
+# {format => 'MARC21'}
+replace_all('format', '\d', '');
+# {format => 'MARC'}    
+
+# {id => ['123-4', '567-X']}
+replace_all('id.*', '-[0-9xX]$', '');
+# {id => ['123', '567']}
+```
+---
+class: middle
+## Catmandu::Fix - count & sum
+```perl
+# { numbers => [1, 2, 3] }
+copy_field('numbers','count');
+count('count');
+copy_field('numbers','sum');
+sum('sum');
+# { numbers => [1, 2, 3], count => 3, sum => 6 }
+```
+---
+class: middle
+## Catmandu::Fix - dictionaries
+```terminal
+$ cat dict.csv
+004,Informatik
+310,Statistik
+510,Mathematik
+```
+```perl
+# { ddc => '004' }
+lookup('ddc', 'dict.csv', -default=>'Allgemeines');
+lookup('ddc', 'dict.csv', -delete=>'1');
+# { ddc => 'Informatik' }
+
+lookup_in_store('ddc', 'MongoDB', -database_name => 'lookups');
+```
+---
+class: middle
+## Catmandu::Fix - conditions
+```perl
+if_exists('ddc');
+    lookup('ddc', 'dict.csv',  -delete=>'1');
+end();
+
+unless_exists('ddc');
+    add_field('ddc', '000');
+end();
+
+if_any_match('ddc', '004');
+    set_field('subject', 'Informatik');
+end();
+
+unless_any_match('subject', '[a-zA-Z]+');
+    lookup('subject', 'dict.csv',  -delete=>'1');
+end();
+```
+---
+class: middle
+## Catmandu::Fix - nested data structures
+```perl
+add_field('dc.title','code4lib');
+add_field('dc.subject.$append', 'Computer');
+add_field('dc.subject.$append', 'Informatik');
+add_field('dc.subject.$append', 'Bibliothek');
+add_field('dc.identifier.$append.zdbid','2415107-5');
+add_field('dc.identifier.$append.ocn','502377032');
+add_field('dc.identifier.$append.issn','1940-5758');
+remove_field('dc.identifier.$first');
+remove_field('dc.subject.1');
+remove_field('dc.subject.*');
+```
+---
+class: middle
+## MARC
+    =LDR  00785nas a2200277 c 4500
+    =001  987874829
+    =003  DE-101
+    =005  20131023080034.0
+    =007  cr||||||||||||
+    =008  080311c20079999|||u||p|o|||||0||||0eng|c
+    =016  7\$2DE-101$a987874829
+    =016  7\$2DE-600$a2415107-5
+    =022  \\$a1940-5758
+    =035  \\$a(DE-599)ZDB2415107-5
+    =035  \\$a(OCoLC)502377032
+    =040  \\$a8999$bger$cDE-101$d9999
+    =041  \\$aeng
+    =082  74$a020$qDE-600$222sdnb
+    =084  \\$a020$qDE-600$2sdnb
+    =245  10$aCode4Lib journal$hElektronische Ressource$bC4LJ
+    =246  13$aC4LJ
+    =260  3\$a[S.l.]$b[s.n.]
+    =300  \\$aOnline-Ressource
+    =362  0\$a1.2007 -
+    =856  4\$uhttp://journal.code4lib.org/$xVerlag$zkostenfrei
+    =856  4\$uhttp://www.bibliothek.uni-regensburg.de/ezeit/?2415107$xEZB
+---
+class: middle
+## Catmandu::Fix::marc_map
+```perl
+marc_map('008_/35-38','language');
+marc_map('016a','identifier.$append');
+marc_map('245[10]a','title');
+marc_map('246[13]a','shorttitle');
+marc_map('856u','urls', -join => '; ');
+remove_field('record');
+```
+---
+class: middle
+## CLI
+```
+catmandu <command> [-DIL] [long options...]
+  -D --debug          
+  -L --load_path      
+  -I --lib_path       
+
+Available commands:
+
+       commands: list the application's commands
+           help: display a command's help screen
+
+         config: export the Catmandu config
+        convert: convert objects
+          count: count the number of objects in a store
+           data: store, index, search, import, export or convert objects
+         delete: delete objects from a store
+         export: export objects from a store
+  exporter_info: list installed Catmandu exporters
+       fix_info: list installed Catmandu fixes
+         import: import objects into a store
+  importer_info: list installed Catmandu importers
+    module_info: list installed perl modules in a given namespace
+           move: move objects to another store
+           repl: interactive shell for Catmandu
+     store_info: list installed Catmandu stores
+```
+---
+class: middle
+## CLI - convert()
+```
+$ catmandu convert MARC to JSON < journals.mrc
+
+$ catmandu convert MARC --type XML to YAML < journals.xml
+
+$ catmandu convert JSON --fields id,title 
+    to CSV --file journals.csv < journals.json
+
+$ catmandu convert JSON --fields id,title 
+    to XLS --file journals.xls < journals.json
+```
+---
+class: middle
+## CLI - convert()
+```
+$ catmandu convert MAB2 --fix "mab_map('331', 'title'); 
+    remove_field('record');" to CSV < journals.dat
+
+$ catmandu convert MAB2 --fix mab2.fix to XLS 
+    --file mab2.xls --fields identifier,title,language  
+    < journals.dat
+```
+---
+class: middle
+## CLI - convert()
+```
+$ cat marc.tt
+[% _id %] [% authors.0 %]: [% title %]
+
+$ catmandu convert MARC --fix marc.fix to Template
+    --template marc.tt < camel.mrc
+```
+---
+class: middle
+## CLI - import()
+```
+$ catmandu import MAB2 --fix mab2.fix
+    to MongoDB --database_name mab2 --bag mab2 
+    < journals.dat
+
+$ catmandu import MAB2 --fix mab2.fix
+     to ElasticSearch --index_name mab2 --bag mab2
+     < journals.dat
+```
+---
+class: middle
+## CLI - export()
+```
+$ catmandu export MongoDB --database_name mab2 --bag mab2 to JSON
+
+$ catmandu export ElasticSearch --index_name mab2 --bag mab2 to JSON
+```
+---
+class: middle
+## CLI - count()
+```
+$ catmandu count MongoDB --database_name mab --bag mab 
+    --query "{\"dc.publisher\": \"Heise\"}"
+
+$ catmandu count ElasticSearch --index_name mab --bag mab 
+    --query 'dc.publisher:"Heise"'
+```
+---
+class: middle
+## CLI - delete()
+```
+$ catmandu delete MongoDB --database_name mab --bag mab
+
+$ catmandu delete ElasticSearch --index_name mab --bag mab
+
+$ catmandu delete MongoDB --database_name mab --bag mab 
+    --q '{"_id":"1262750"}'
+
+$ catmandu delete ElasticSearch --index_name mab --bag mab 
+    --q '_id:"1262750"'
+```
+---
+class: middle
+## CLI - move()
+```
+$ catmandu move MongoDB --database_name mab --bag mab 
+    to ElasticSearch --index_name mab --bag mab
+
+$ catmandu move MongoDB --database_name mab --bag mab 
+    --query "{\"dcterms.spatial\": \"XA-DE\"}" 
+    to ElasticSearch --index_name moved --bag moved
+
+$ catmandu move ElasticSearch --index_name moved --bag moved 
+    --query "dc.identifier:\"47918-4\"" 
+    to ElasticSearch --index_name selected --bag selected
+```
+---
+class: middle
+## CLI - data()
+```
+$ catmandu data --from-store MongoDB --from-database_name mab
+    --from-bag mab --query "{\"dc.identifier\": \"47918-4\"}"
+
+$ catmandu data --from-store ElasticSearch --from-index_name mab
+    --from-bag mab --query "dc.identifier:\"47918-4\""
+
+$ catmandu data --from-store ElasticSearch --from-index_name mab
+    --from-bag mab --cql-query "publisher exact Heise"
+
+$ catmandu data --from-store ElasticSearch --from-index_name mab
+    --from-bag mab --cql-query "issued > 2009" --into-exporter YAML
+
+$ catmandu data --from-store ElasticSearch --from-index_name mab
+    --from-bag mab --cql-query "issued > 2009" 
+    --into-exporter CSV --fix 'retain_field("_id")'
+```
+---
+class: middle
+## CLI - APIs
+```
+$ catmandu convert OAI --url http://oai.example.org to JSON
+
+$ catmandu convert SRU --base http://sru.example.org --recordSchema marcxml 
+    --parser marcxml --query "issn=1940-5758" to JSON    
+
+$ catmandu convert getJSON --from http://example.org/alice.json to YAML
+
+$ catmandu convert getJSON --dry 1 --url http://{domain}/robots.txt < domains
+```
+---
+class: middle
+## Catmandu - config
+```
+$ cat catmandu.yml
+---
+store:
+  test1:
+   package: MongoDB
+   options:
+    database_name: mydb
+  test2:
+   package: ElasticSearch
+   options:
+    index_name: mydb
+  test3:
+   package: Solr
+   options:
+    url: http://localhost:8983/solr
+
+$ catmandu import JSON to test1 < records.json
+$ catmandu import MARC to test2 < records.mrc
+$ catmandu import YAML to test3 < records.yaml
+$ catmandu export test1 to JSON
+$ catmandu export test2 to JSON
+$ catmandy export test3
+```
+---
+class: middle
+## Catmandu::Fix
+```perl
+package Catmandu::Fix::foo;
+
+use Moo;
+
+sub fix {
+    my ($self,$data) = @_;
+
+    # Fix your data here...
+
+    return $data;
+}
+
+1;
+```
+---
+class: middle
+## Catmandu - extensions
+```bash
+├── Catmandu
+│   ├── Cmd
+│   │   └── foo.pm
+│   ├── Exporter
+│   │   ├── Foo.pm
+│   ├── Fix
+│   │   ├── foo_map.pm
+│   ├── Importer
+│   │   ├── Foo.pm
+│   ├── Store
+│   │   ├── Foo
+│   │   │   ├── Bag.pm
+│   │   │   └── Searcher.pm
+│   │   ├── Foo.pm
+```
+---
+class: center middle
+# Links
+
+http://librecat.org
+
+http://librecat.org/Catmandu/
+
+http://metacpan.org/release/Catmandu
+
+http://github.com/LibreCat/Catmandu
+---
+class: middle
+.center[![Geek&Poke](./img/geekandpoke_book.png "geek-and-poke.com Books 2009.01.08")]
+.center[<small>\[Comic by [Oliver Widder](http://geek-and-poke.com), [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/deed.en_U)\]</small>]
+
+    </textarea>
+    <div id="slideshow"></div>
+    <script type="text/javascript">
+        var slideshow = remark.create();
+    </script>
+  </body>
+</html>
