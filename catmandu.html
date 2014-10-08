@@ -223,140 +223,10 @@ AlephX BibTeX MAB2 MARC PICA
 Atom CSV JSON RDF XLS YAML
 ---
 class: center middle
-## Catmandu::Fix
+## Fix
 ... easy data manipulation by non programmers
 
 ... small Perl DSL
----
-class: middle
-## Catmandu::Fix - field
-
-```perl
-add_field('name','Smith');
-# { name => 'Smith' }
-set_field('name','Doe');
-# { name => 'Doe'}
-copy_field('name','title');
-# { name => 'Doe, John', title => 'Dr.' }
-remove_field('title');
-# { name => 'Doe, John' }
-move_field('name','dc.creator');
-# { 'dc.creator' => 'Doe, John' }
-```
----
-class: middle
-## Catmandu::Fix - field
-```perl
-# { subjects => 'Perl,R,JavaScript' }
-split_field('subjects',',');
-sort_field('subjects');
-# { subjects => ['JavaScript', 'Perl', 'R'] }
-join_field('subjects','; ');
-# { subjects => 'JavasSript; Perl; R' }
-```
----
-class: middle
-## Catmandu::Fix - string
-```perl
-# { name => 'Doe'}
-upcase('name');
-# { name => 'DOE' }
-downcase('name');
-# { name => 'doe' }
-capitalize('name');
-# { name => 'Doe' }
-append('name',', John');
-# { name => 'Doe, John' }
-prepend('name',', Dr. ');
-# { name => 'Dr. Doe, John' }
-```
----
-class: middle
-## Catmandu::Fix - string
-```perl
-# { name => ' Doe,  '}
-trim('name');
-# { name => 'Doe,' }
-trim('name','nonword');
-# { name => 'Doe' }
-substring('name', 0, 1);
-# { name => 'D' }
-```
----
-class: middle
-## Catmandu::Fix - string
-```perl
-# {format => 'MARC21'}
-replace_all('format', '\d', '');
-# {format => 'MARC'}    
-
-# {id => ['123-4', '567-X']}
-replace_all('id.*', '-[0-9xX]$', '');
-# {id => ['123', '567']}
-```
----
-class: middle
-## Catmandu::Fix - count & sum
-```perl
-# { numbers => [1, 2, 3] }
-copy_field('numbers','count');
-count('count');
-copy_field('numbers','sum');
-sum('sum');
-# { numbers => [1, 2, 3], count => 3, sum => 6 }
-```
----
-class: middle
-## Catmandu::Fix - dictionaries
-```terminal
-$ cat dict.csv
-004,Informatik
-310,Statistik
-510,Mathematik
-```
-```perl
-# { ddc => '004' }
-lookup('ddc', 'dict.csv', -default=>'Allgemeines');
-lookup('ddc', 'dict.csv', -delete=>'1');
-# { ddc => 'Informatik' }
-
-lookup_in_store('ddc', 'MongoDB', -database_name => 'lookups');
-```
----
-class: middle
-## Catmandu::Fix - conditions
-```perl
-if_exists('ddc');
-    lookup('ddc', 'dict.csv',  -delete=>'1');
-end();
-
-unless_exists('ddc');
-    add_field('ddc', '000');
-end();
-
-if_any_match('ddc', '004');
-    set_field('subject', 'Informatik');
-end();
-
-unless_any_match('subject', '[a-zA-Z]+');
-    lookup('subject', 'dict.csv',  -delete=>'1');
-end();
-```
----
-class: middle
-## Catmandu::Fix - nested data structures
-```perl
-add_field('dc.title','code4lib');
-add_field('dc.subject.$append', 'Computer');
-add_field('dc.subject.$append', 'Informatik');
-add_field('dc.subject.$append', 'Bibliothek');
-add_field('dc.identifier.$append.zdbid','2415107-5');
-add_field('dc.identifier.$append.ocn','502377032');
-add_field('dc.identifier.$append.issn','1940-5758');
-remove_field('dc.identifier.$first');
-remove_field('dc.subject.1');
-remove_field('dc.subject.*');
-```
 ---
 class: middle
 ## MARC
@@ -392,6 +262,136 @@ marc_map('245[10]a','title');
 marc_map('246[13]a','shorttitle');
 marc_map('856u','urls', -join => '; ');
 remove_field('record');
+```
+---
+class: middle
+## Fix - field
+
+```perl
+add_field('name','Smith');
+# { name => 'Smith' }
+set_field('name','Doe');
+# { name => 'Doe'}
+copy_field('name','title');
+# { name => 'Doe, John', title => 'Dr.' }
+remove_field('title');
+# { name => 'Doe, John' }
+move_field('name','dc.creator');
+# { 'dc.creator' => 'Doe, John' }
+```
+---
+class: middle
+## Fix - field
+```perl
+# { subjects => 'Perl,R,JavaScript' }
+split_field('subjects',',');
+sort_field('subjects');
+# { subjects => ['JavaScript', 'Perl', 'R'] }
+join_field('subjects','; ');
+# { subjects => 'JavasSript; Perl; R' }
+```
+---
+class: middle
+## Fix - string
+```perl
+# { name => 'Doe'}
+upcase('name');
+# { name => 'DOE' }
+downcase('name');
+# { name => 'doe' }
+capitalize('name');
+# { name => 'Doe' }
+append('name',', John');
+# { name => 'Doe, John' }
+prepend('name',', Dr. ');
+# { name => 'Dr. Doe, John' }
+```
+---
+class: middle
+## Fix - string
+```perl
+# { name => ' Doe,  '}
+trim('name');
+# { name => 'Doe,' }
+trim('name','nonword');
+# { name => 'Doe' }
+substring('name', 0, 1);
+# { name => 'D' }
+```
+---
+class: middle
+## Fix - string
+```perl
+# {format => 'MARC21'}
+replace_all('format', '\d', '');
+# {format => 'MARC'}    
+
+# {id => ['123-4', '567-X']}
+replace_all('id.*', '-[0-9xX]$', '');
+# {id => ['123', '567']}
+```
+---
+class: middle
+## Fix - count & sum
+```perl
+# { numbers => [1, 2, 3] }
+copy_field('numbers','count');
+count('count');
+copy_field('numbers','sum');
+sum('sum');
+# { numbers => [1, 2, 3], count => 3, sum => 6 }
+```
+---
+class: middle
+## Fix - dictionaries
+```terminal
+$ cat dict.csv
+004,Informatik
+310,Statistik
+510,Mathematik
+```
+```perl
+# { ddc => '004' }
+lookup('ddc', 'dict.csv', -default=>'Allgemeines');
+lookup('ddc', 'dict.csv', -delete=>'1');
+# { ddc => 'Informatik' }
+
+lookup_in_store('ddc', 'MongoDB', -database_name => 'lookups');
+```
+---
+class: middle
+## Fix - conditions
+```perl
+if_exists('ddc');
+    lookup('ddc', 'dict.csv',  -delete=>'1');
+end();
+
+unless_exists('ddc');
+    add_field('ddc', '000');
+end();
+
+if_any_match('ddc', '004');
+    set_field('subject', 'Informatik');
+end();
+
+unless_any_match('subject', '[a-zA-Z]+');
+    lookup('subject', 'dict.csv',  -delete=>'1');
+end();
+```
+---
+class: middle
+## Fix - nested data structures
+```perl
+add_field('dc.title','code4lib');
+add_field('dc.subject.$append', 'Computer');
+add_field('dc.subject.$append', 'Informatik');
+add_field('dc.subject.$append', 'Bibliothek');
+add_field('dc.identifier.$append.zdbid','2415107-5');
+add_field('dc.identifier.$append.ocn','502377032');
+add_field('dc.identifier.$append.issn','1940-5758');
+remove_field('dc.identifier.$first');
+remove_field('dc.subject.1');
+remove_field('dc.subject.*');
 ```
 ---
 class: middle
@@ -550,7 +550,7 @@ $ catmandu convert getJSON --dry 1 --url http://{domain}/robots.txt < domains
 ```
 ---
 class: middle
-## Catmandu - config
+## Config
 ```
 $ cat catmandu.yml
 ---
