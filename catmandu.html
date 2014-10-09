@@ -167,11 +167,11 @@ class: middle
 
 ... provided via library specific APIs (OAI, SRU, Z39.50, ...)
 
-... used in diverse systems (OPAC, discovery system, institutional repositories, link resolvers, ...)
+... used in diverse systems (OPACs, discovery systems, institutional repositories, link resolvers, ...)
 ---
 class: center middle
 ## Demand
-... for a library specific (meta)data toolkit
+... for a library specific metadata toolkit
 ---
 class: center middle
 ## LibreCat
@@ -189,7 +189,7 @@ class: center middle
 
 ... map data to a common data model
 
-... store/index data in database or search engine
+... store/index data in databases or search engines
 
 ... export data in various formats
 ---
@@ -222,12 +222,6 @@ AlephX BibTeX MAB2 MARC PICA
 
 Atom CSV JSON RDF XLS XML YAML
 ---
-class: center middle
-## Fix
-... easy data manipulation by non programmers
-
-... small Perl DSL
----
 class: middle
 ## MARC
     =LDR  00785nas a2200277 c 4500
@@ -252,6 +246,12 @@ class: middle
     =362  0\$a1.2007 -
     =856  4\$uhttp://journal.code4lib.org/$xVerlag$zkostenfrei
     =856  4\$uhttp://www.bibliothek.uni-regensburg.de/ezeit/?2415107$xEZB
+---
+class: center middle
+## Fix
+... easy data manipulation by non programmers
+
+... small Perl DSL
 ---
 class: middle
 ## Catmandu::Fix::marc_map
@@ -541,12 +541,13 @@ class: middle
 ```
 $ catmandu convert OAI --url http://oai.example.org to JSON
 
-$ catmandu convert SRU --base http://sru.example.org --recordSchema marcxml 
-    --parser marcxml --query "issn=1940-5758" to JSON    
+$ catmandu convert SRU --base http://sru.example.org --recordSchema 
+    marcxml --parser marcxml --query "issn=1940-5758" to JSON    
 
 $ catmandu convert getJSON --from http://example.org/alice.json to YAML
 
-$ catmandu convert getJSON --dry 1 --url http://{domain}/robots.txt < domains
+$ catmandu convert getJSON --dry 1 --url http://{domain}/robots.txt 
+    < domains
 ```
 ---
 class: middle
